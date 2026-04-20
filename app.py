@@ -1,4 +1,3 @@
-%%writefile app.py
 import streamlit as st
 import torch
 import torchvision.models as models
@@ -10,11 +9,31 @@ import numpy as np
 from pytorch_grad_cam import GradCAM
 from pytorch_grad_cam.utils.model_targets import ClassifierOutputTarget
 from pytorch_grad_cam.utils.image import show_cam_on_image
+import os
+import urllib.request
 
 # --- UI Setup ---
 st.set_page_config(page_title="Medical Image Diagnosis", layout="wide")
 st.title("Multi-Model Medical Image Diagnosis System")
 st.write("Upload a Chest X-Ray to receive an ensemble diagnosis (ResNet50 + ViT) and Grad-CAM analysis.")
+
+# --- Auto-Download Model Weights ---
+@st.cache_resource
+def download_weights():
+    # 👇 REPLACE THESE WITH YOUR ACTUAL GITHUB RELEASE LINKS 👇
+    resnet_url = "https://github.com/burhan086/medical-imaging-ensemble/releases/download/v1.0/resnet50_pneumonia.pth"
+    vit_url = "https://github.com/burhan086/medical-imaging-ensemble/releases/download/v1.0/vit_pneumonia.pth"
+    
+    if not os.path.exists('resnet50_pneumonia.pth'):
+        with st.spinner("Downloading ResNet50 weights (~90MB)... Please wait."):
+            urllib.request.urlretrieve(resnet_url, 'resnet50_pneumonia.pth')
+            
+    if not os.path.exists('vit_pneumonia.pth'):
+        with st.spinner("Downloading ViT weights (~330MB)... This may take a minute."):
+            urllib.request.urlretrieve(vit_url, 'vit_pneumonia.pth')
+
+# Call the download function before loading models
+download_weights()
 
 # --- Load Models (Cached so they don't reload on every click) ---
 @st.cache_resource
@@ -60,7 +79,6 @@ if uploaded_file is not None:
     col1, col2 = st.columns(2)
     with col1:
         st.subheader("Original X-Ray")
-        # FIXED: Updated parameter to remove the deprecation warning
         st.image(image, use_container_width=True)
         
     # Run Inference
@@ -93,5 +111,4 @@ if uploaded_file is not None:
         
     with col2:
         st.subheader("Grad-CAM Focus Area")
-        # FIXED: Updated parameter to remove the deprecation warning
         st.image(visualization, use_container_width=True)
