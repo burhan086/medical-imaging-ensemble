@@ -19,7 +19,7 @@ To achieve robust performance, the system utilizes a dual-model ensemble:
 
 The full research, data preprocessing, and model training logic is documented in the Jupyter Notebook:
 
- * **[View Training Notebook](./Multi-Model_Ensemble_ViT_ResNet_Pneumonia.ipynb)**
+ * **[View Training Notebook](./Multi_Model_Ensemble_ViT_ResNet_Pneumonia.ipynb)**
 
 ### **Key Insights:**
 
