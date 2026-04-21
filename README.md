@@ -1,6 +1,6 @@
 # 🩺 Multi-Model Medical Image Diagnosis System
 
-## **[🚀 Live Demo - Click Here]
+## [🚀 Live Demo - Click Here]
 (https://burhan-medical-vit-resnet.streamlit.app)**
 
 ## 📌 Project Overview
